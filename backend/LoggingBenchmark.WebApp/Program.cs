@@ -1,7 +1,10 @@
 using IdGen.DependencyInjection;
+using LoggingBenchmark.WebApp;
 using LoggingBenchmark.WebApp.Features.Projects;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddLogging();
 
 builder.Services.AddOpenApi();
 
