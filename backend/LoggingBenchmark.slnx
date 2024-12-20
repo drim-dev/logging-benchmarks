@@ -1,7 +1,8 @@
 <Solution>
   <Folder Name="/Solution Items/">
-    <File Path="..\.editorconfig" />
+    <File Path="..\.editorconfig"/>
   </Folder>
-  <Project Path="LoggingBenchmark.Aspire.AppHost\LoggingBenchmark.Aspire.AppHost.csproj" Type="Classic C#" />
-  <Project Path="LoggingBenchmark.WebApp\LoggingBenchmark.WebApp.csproj" Type="Classic C#" />
+  <Project Path="LoggingBenchmark.Aspire.AppHost\LoggingBenchmark.Aspire.AppHost.csproj" Type="Classic C#"/>
+  <Project Path="LoggingBenchmark.Resources\LoggingBenchmark.Resources.csproj" Type="Classic C#"/>
+  <Project Path="LoggingBenchmark.WebApp\LoggingBenchmark.WebApp.csproj" Type="Classic C#"/>
 </Solution>

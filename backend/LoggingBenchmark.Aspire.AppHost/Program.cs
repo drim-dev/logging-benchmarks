@@ -1,3 +1,4 @@
+using LoggingBenchmark.Resources;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -17,10 +18,18 @@ builder
     .WithHttpEndpoint(targetPort: 5601, port: 61679)
     .WithLifetime(ContainerLifetime.Persistent);
 
+var postgres = builder
+    .AddPostgres("postgres")
+    .WithImageTag("17.2")
+    .WithPgAdmin();
+
+var webAppDb = postgres.AddDatabase(ResourceName.WebAppDb);
+
 builder.AddProject<LoggingBenchmark_WebApp>("web-app")
     .WithEnvironment("AspireRuntime", true.ToString())
     .WithEnvironment("BenchmarkType", "ElasticsearchHttpClient")
     .WithEnvironment("Logging__Elasticsearch__ShipTo__NodeUris__0", elasticsearch.GetEndpoint("http"))
-    .WithEnvironment("Logging__Elasticsearch__Index__Format", "web-app-{0:yyyy.MM.dd}");
+    .WithEnvironment("Logging__Elasticsearch__Index__Format", "web-app-{0:yyyy.MM.dd}")
+    .WithReference(webAppDb);
 
 builder.Build().Run();
