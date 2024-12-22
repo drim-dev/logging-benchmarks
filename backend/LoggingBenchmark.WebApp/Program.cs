@@ -11,6 +11,7 @@ builder.AddLogging();
 builder.Services.AddOpenApi();
 
 builder.AddNpgsqlDbContext<WebAppDbContext>(ResourceName.WebAppDb);
+builder.Services.AddHostedService<SetupHostedService>();
 
 builder.Services.AddIdGen(1);
 

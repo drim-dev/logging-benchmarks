@@ -21,7 +21,8 @@ builder
 var postgres = builder
     .AddPostgres("postgres")
     .WithImageTag("17.2")
-    .WithPgAdmin();
+    .WithPgAdmin()
+    .WithLifetime(ContainerLifetime.Persistent);
 
 var webAppDb = postgres.AddDatabase(ResourceName.WebAppDb);
 
@@ -30,6 +31,7 @@ builder.AddProject<LoggingBenchmark_WebApp>("web-app")
     .WithEnvironment("BenchmarkType", "ElasticsearchHttpClient")
     .WithEnvironment("Logging__Elasticsearch__ShipTo__NodeUris__0", elasticsearch.GetEndpoint("http"))
     .WithEnvironment("Logging__Elasticsearch__Index__Format", "web-app-{0:yyyy.MM.dd}")
+    .WaitFor(webAppDb)
     .WithReference(webAppDb);
 
 builder.Build().Run();
