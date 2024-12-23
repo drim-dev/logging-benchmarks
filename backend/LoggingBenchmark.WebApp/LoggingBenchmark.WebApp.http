@@ -1,5 +1,14 @@
 @HostAddress = http://localhost:5287
-@projectId = 1234
+@projectId = 1320874218975399936
+
+POST {{HostAddress}}/project/
+Content-Type: application/json
+
+{
+  "Name": "new-project-{{$random.uuid}}"
+}
+
+###
 
 GET {{HostAddress}}/project/{{projectId}}
 Accept: application/json
