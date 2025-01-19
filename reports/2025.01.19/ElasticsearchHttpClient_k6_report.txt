@@ -1,0 +1,24 @@
+     scenarios: (100.00%) 1 scenario, 20000 max VUs, 10m30s max duration (incl. graceful stop):
+              * load_test: 2000.00 iterations/s for 10m0s (maxVUs: 20000, gracefulStop: 30s)
+
+
+     data_received..................: 239 MB  398 kB/s
+     data_sent......................: 174 MB  290 kB/s
+     http_req_blocked...............: avg=1.83ms  min=1.37µs med=2.92µs  max=1.46s    p(90)=3.87µs  p(95)=4.49µs
+     http_req_connecting............: avg=1.79ms  min=0s     med=0s      max=1.37s    p(90)=0s      p(95)=0s
+     http_req_duration..............: avg=8.04ms  min=1.65ms med=2.95ms  max=1s       p(90)=6.4ms   p(95)=21.75ms
+       { expected_response:true }...: avg=8.04ms  min=1.65ms med=2.95ms  max=1s       p(90)=6.4ms   p(95)=21.75ms
+     http_req_failed................: 0.00%   0 out of 1200002
+     http_req_receiving.............: avg=25.01µs min=6.94µs med=21.49µs max=429.09ms p(90)=31.98µs p(95)=40.63µs
+     http_req_sending...............: avg=83.57µs min=4.79µs med=11.28µs max=595.53ms p(90)=18.45µs p(95)=29.12µs
+     http_req_tls_handshaking.......: avg=0s      min=0s     med=0s      max=0s       p(90)=0s      p(95)=0s
+     http_req_waiting...............: avg=7.94ms  min=1.61ms med=2.91ms  max=1s       p(90)=6.36ms  p(95)=21.58ms
+     http_reqs......................: 1200002 1999.934979/s
+     iteration_duration.............: avg=9.94ms  min=1.7ms  med=3.02ms  max=1.86s    p(90)=6.49ms  p(95)=22.61ms
+     iterations.....................: 1200002 1999.934979/s
+     vus............................: 6       min=0            max=2572
+     vus_max........................: 20000   min=8173         max=20000
+
+
+running (10m00.0s), 00000/20000 VUs, 1200002 complete and 0 interrupted iterations
+load_test ✓ [======================================] 00000/20000 VUs  10m0s  2000.00 iters/s
