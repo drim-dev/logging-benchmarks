@@ -113,7 +113,7 @@ We use Terraform to setup environments.
 
 ### Local Environment
 
-It is possible to install all components on a local computer for debugging purposes. But be aware that the results will be wrong because there will be no isolation.
+It is possible to run benchmarks on a local computer for debugging purposes. However, be aware that the results will be wrong because there will be no application isolation.
 
 1. Make sure you have Docker, Terraform, and k6 installed
 2. Clone the repository
@@ -122,7 +122,7 @@ It is possible to install all components on a local computer for debugging purpo
 5. Run `terraform apply` and confirm the generated plan by typing `yes`
 6. cd into `k6`
 7. Use the `localhost` URL in the k6 script https://github.com/drim-dev/logging-benchmarks/blob/main/k6/script.js#L16
-8. Run `k6 run script.js` and
+8. Run `k6 run script.js`
 9. Go to Grafana `http://localhost:3000` (username and password are `admin`/`admin`) and select the "Server utilization" dashboard to see the metrics graphs
 10. After k6 finishes, it outputs request latencies
 11. Run `terraform destroy` to remove all components
@@ -142,3 +142,76 @@ For each benchmark type it is necessary to tweak the Terraform configuration:
    * Make sure `benchmark_type = JsonConsole` https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L72
 
 ### Azure Environment
+
+1. Register at Azure, if not yet
+2. Log in to Azure
+3. Write down a Subscription ID from https://portal.azure.com/#view/Microsoft_Azure_Billing/SubscriptionsBladeV2
+4. Install Azure CLI https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+5. Login to Azure with CLI using `az login`
+6. Clone the repository
+7. cd into `terraform/environments/local`
+8. Run `terraform init`
+9. Run `terraform apply`
+10. Enter the Azure Subscription ID
+11. Enter a username to create in Azure VMs
+12. Confirm the generated plan by typing `yes`
+13. Save the SSH private key that is output at the end of the terraform operation
+14. Go to the Azure VMs page to learn public IP addresses of the created servers https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines
+15. Make sure you can SSH into each VM by using `ssh -i /path/to/saved/ssh/private/key <username>@<vm_public_ip>`
+
+> __IMPORTANT!!!__
+>
+> Do not forget to locally cd into `terraform/environments/azure` and run `terraform destroy` to delete all Azure resources after finishing benchmarking. Your Azure bill will be big if you do not do this.
+
+Now it is necessary to set up each VM separately.
+
+1. db:
+
+   * SSH into the db VM
+   * Clone the repository and cd into its directory
+   * Install Docker with `scripts/install-docker.sh`
+   * Install Terraform with `scripts/install-terraform.sh`
+   * cd into `terraform/environments/db-server` and run `terraform init` followed by `terraform apply`
+
+2. telemetry:
+
+   * SSH into the telemetry VM
+   * Clone the repository and cd into its directory
+   * Install Docker with `scripts/install-docker.sh`
+   * Install Terraform with `scripts/install-terraform.sh`
+   * cd into `terraform/environments/telemetry-server` and run `terraform init` followed by `terraform apply`
+   * Go to Grafana at http://<telemetry_vm_public_ip>:3000, login using `admin`/`admin` and open the "Server utilization" dashboard to see the metrics graphs
+
+3. app:
+
+   * SSH into the app VM
+   * Clone the repository and cd into its directory
+   * Install Docker with `scripts/install-docker.sh`
+   * Install Terraform with `scripts/install-terraform.sh`
+   * cd into `terraform/environments/app-server` and run `terraform init` followed by `terraform apply`
+
+4. k6:
+
+   * SSH into the k6 VM
+   * Clone the repository and cd into its directory
+   * Install k6 with `scripts/install-k6.sh`
+   * Run `k6 run k6/scripts.js` to run a benchmark
+   * After k6 finishes, it outputs request latencies
+
+For each benchmark type, the Terraform configuration must be tweaked before `terraform apply` at the app server:
+
+1. No Logging
+   * Make sure OTel Collector is commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L21-L30
+   * Make sure benchmark_type = NoLogging https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L40
+
+2. Application to Elasticsearch
+   * Make sure OTel Collector is commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L21-L30
+   * Make sure benchmark_type = ElasticsearchHttpClient https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L40
+
+3. OpenTelemetry Collector to Elasticsearch
+   * Make sure OTel Collector is not commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L21-L30
+   * Make sure benchmark_type = JsonConsole https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L40
+
+> __IMPORTANT!!!__
+>
+> Do not forget to locally cd into `terraform/environments/azure` and run `terraform destroy` to delete all Azure resources after finishing benchmarking. Your Azure bill will be big if you do not do this.
