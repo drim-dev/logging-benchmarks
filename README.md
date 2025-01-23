@@ -109,6 +109,36 @@ _Memory utilization is ~8.5%._
 
 ## How to Reproduce
 
+We use Terraform to setup environments.
+
 ### Local Environment
+
+It is possible to install all components on a local computer for debugging purposes. But be aware that the results will be wrong because there will be no isolation.
+
+1. Make sure you have Docker, Terraform, and k6 installed
+2. Clone the repository
+3. cd into `terraform/environments/local`
+4. Run `terraform init`
+5. Run `terraform apply` and confirm the generated plan by typing `yes`
+6. cd into `k6`
+7. Use the `localhost` URL in the k6 script https://github.com/drim-dev/logging-benchmarks/blob/main/k6/script.js#L16
+8. Run `k6 run script.js` and
+9. Go to Grafana `http://localhost:3000` (username and password are `admin`/`admin`) and select the "Server utilization" dashboard to see the metrics graphs
+10. After k6 finishes, it outputs request latencies
+11. Run `terraform destroy` to remove all components
+
+For each benchmark type it is necessary to tweak the Terraform configuration:
+
+1. No Logging
+   * Make sure OTel Collector is commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L31-L40
+   * Make sure `benchmark_type = NoLogging` https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L72
+
+2. Application to Elasticsearch
+   * Make sure OTel Collector is commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L31-L40
+   * Make sure `benchmark_type = ElasticsearchHttpClient` https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L72
+
+3. OpenTelemetry Collector to Elasticsearch
+   * Make sure OTel Collector is not commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L31-L40
+   * Make sure `benchmark_type = JsonConsole` https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/local/main.tf#L72
 
 ### Azure Environment
