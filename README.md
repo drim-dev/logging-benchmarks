@@ -159,9 +159,11 @@ For each benchmark type it is necessary to tweak the Terraform configuration:
 14. Go to the Azure VMs page to learn public IP addresses of the created servers https://portal.azure.com/#browse/Microsoft.Compute%2FVirtualMachines
 15. Make sure you can SSH into each VM by using `ssh -i /path/to/saved/ssh/private/key <username>@<vm_public_ip>`
 
-> __IMPORTANT!!!__
->
-> Do not forget to locally cd into `terraform/environments/azure` and run `terraform destroy` to delete all Azure resources after finishing benchmarking. Your Azure bill will be big if you do not do this.
+__IMPORTANT!!!__
+
+__Do not forget to locally cd into `terraform/environments/azure` and run `terraform destroy` to delete all Azure resources after finishing benchmarking. Your Azure bill will be big if you do not do this.__
+
+__IMPORTANT!!!__
 
 Now it is necessary to set up each VM separately.
 
@@ -212,6 +214,8 @@ For each benchmark type, the Terraform configuration must be tweaked before `ter
    * Make sure OTel Collector is not commented out https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L21-L30
    * Make sure benchmark_type = JsonConsole https://github.com/drim-dev/logging-benchmarks/blob/main/terraform/environments/app-server/main.tf#L40
 
-> __IMPORTANT!!!__
->
-> Do not forget to locally cd into `terraform/environments/azure` and run `terraform destroy` to delete all Azure resources after finishing benchmarking. Your Azure bill will be big if you do not do this.
+__IMPORTANT!!!__
+
+__Do not forget to locally cd into `terraform/environments/azure` and run `terraform destroy` to delete all Azure resources after finishing benchmarking. Your Azure bill will be big if you do not do this.__
+
+__IMPORTANT!!!__
