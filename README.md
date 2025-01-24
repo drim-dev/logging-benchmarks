@@ -29,6 +29,17 @@ The testing environment consists of 4 Azure virtual machines. The VM size is Sta
 
 _We use several servers to isolate components so they do not interfere with each other and distort the benchmark results._
 
+### Software Versions
+
+* .NET 9.0
+* ASP.NET Core 9.0
+* Entity Framework Core 9.0
+* PostgreSQL 17.2
+* OpenTelemetry Collector 0.115.1
+* Node Exporter 1.8.2
+* Prometheus 3.0.1
+* Elasticsearch 8.16.1
+
 ## Benchmarks
 
 We ran all benchmarks several times to ensure the results were stable and reproducible.
@@ -113,7 +124,7 @@ We use Terraform to setup environments.
 
 ### Local Environment
 
-It is possible to run benchmarks on a local computer for debugging purposes. However, be aware that the results will be wrong because there will be no application isolation.
+It is possible to run benchmarks on a local computer for debugging purposes. However, be aware that the results will be wrong because there will be no application isolation. The supported operating systems are Linux and MacOS. For Windows, you will need WSL2.
 
 1. Make sure you have Docker, Terraform, and k6 installed
 2. Clone the repository
@@ -149,7 +160,7 @@ For each benchmark type it is necessary to tweak the Terraform configuration:
 4. Install Azure CLI https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
 5. Login to Azure with CLI using `az login`
 6. Clone the repository
-7. cd into `terraform/environments/local`
+7. cd into `terraform/environments/azure`
 8. Run `terraform init`
 9. Run `terraform apply`
 10. Enter the Azure Subscription ID
